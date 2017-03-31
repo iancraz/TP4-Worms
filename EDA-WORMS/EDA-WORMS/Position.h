@@ -8,6 +8,8 @@ public:
 	Position();
 	double getX();
 	double getY();
+	void setX(double _x);
+	void setY(double _y);
 
 private:
 	double x;

@@ -15,3 +15,13 @@ double Position::getY()
 {
 	return y;
 }
+
+void Position::setX(double _x)
+{
+	x = _x;
+}
+
+void Position::setY(double _y)
+{
+	y = _y;
+}

@@ -5,3 +5,6 @@
 /EDA-WORMS/.vs/EDA-WORMS/v14
 *.db
 /EDA-WORMS/EDA-WORMS.VC.VC.opendb
+/EDA-WORMS/packages
+/EDA-WORMS/EDA-WORMS/Debug
+/EDA-WORMS/Debug
