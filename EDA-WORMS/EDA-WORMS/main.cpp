@@ -1,8 +1,10 @@
 #include <iostream>
-
+#include <cstdint>
+#include "Position.h"
 
 
 typedef enum { STILL, WALKING_PENDING, WALKING, JUMPING, FINISHING_WALKING, FINISHING_JUMING } wormState;
+
 
 
 class Worm
