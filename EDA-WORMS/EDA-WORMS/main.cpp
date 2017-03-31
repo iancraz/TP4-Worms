@@ -4,9 +4,6 @@
 #include "Graphics.h"
 
 
-typedef enum { STILL, WALKING_PENDING, WALKING, JUMPING, FINISHING_WALKING, FINISHING_JUMING } wormState;
-
-
 int main(int argc, char* argv[])
 {
 	Graphics g;

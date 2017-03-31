@@ -6,12 +6,13 @@
 #define V_JUMP	27.0
 #define V_WALK	27.0
 #define GRAVITY	0.24
+#define M_PI acos(-1.0)
 
 Worm::Worm()
 {
-	p.setx(START_POSITION+randomPosition(MAX_POSITION));
+	p.setX(START_POSITION+randomPosition(MAX_POSITION));
 	p.setY(MAX_Y_POSITION);
-	lookignRight = (rand()%2);
+	lookingRight = (bool)(rand() & 1);
 	IamDoing = STILL;
 	frameCount = 0;
 	aux=false;
@@ -38,7 +39,7 @@ void Worm::startJumping()
 	frameCount = 0;
 }
 
-void Worms::continueAction()
+void Worm::continueAction()
 {
 	if(frameCount > FPS || aux == true)
 	{
@@ -61,8 +62,8 @@ void Worms::continueAction()
 
 	if(IamDoing == JUMPING && aux == false)
 	{
-		p.setY(MIN_Y_POSITION + sin((double)60*2*M_PI/180)*V_JUMP* ((double)1/(FPS - frameCount + 1)) + (GRAVITY * pow(((double)1/(FPS - frameCount +1)),2)));
-		switch(lookignRight)
+		p.setY(MAX_Y_POSITION + sin((double)60*2*M_PI/180)*V_JUMP* ((double)1/(FPS - frameCount + 1)) + (GRAVITY * pow(((double)1/(FPS - frameCount +1)),2)));
+		switch(lookingRight)
 		{
 			case true:
 				p.setX(p.getX()+cos((double)60*2*M_PI/180)*V_JUMP*((double)1/(FPS - frameCount+1)));
@@ -80,15 +81,15 @@ void Worms::continueAction()
 	}
 	else if(IamDoing == WALKING && aux == false)
 	{
-		switch(lookignRight)
+		switch(lookingRight)
 		{
 			case true:
 				if((p.getX()+(V_WALK/FPS)) <= (START_POSITION + MAX_POSITION))
-					setX(p.getX()+(V_WALK/FPS));
+					p.setX(p.getX()+(V_WALK/FPS));
 				break;
 			case false:
 			if((p.getX()-(V_WALK/FPS)) >= (START_POSITION + MAX_POSITION))
-					setX(p.getX()-(V_WALK/FPS));
+					p.setX(p.getX()-(V_WALK/FPS));
 				break;
 		}
 		if(frameCount == (int32_t)(FPS+1))
@@ -124,7 +125,7 @@ double Worm::getY()
 	return p.getY();
 }
 
-uint32_t worm::getCurrentFrame()
+uint32_t Worm::getCurrentFrame()
 {
 	return frameCount;
 }
@@ -132,5 +133,5 @@ uint32_t worm::getCurrentFrame()
 
 bool Worm::_lookingRight()
 {
-	return lookignRight;
+	return lookingRight;
 }

@@ -1,6 +1,9 @@
 #include <cstdint>
+#include "Position.h"
 
-typedef enum {STILL, WALKING_PENDING, WALKING, JUMPING, FINISHING_WALKING, FINISHING_JUMING} wormState;
+typedef enum {STILL, WALKING_PENDING, WALKING, JUMPING, FINISHING_WALKING, FINISHING_JUMPING} wormState;
+
+#define FPS			60.0
 
 class Worm
 {

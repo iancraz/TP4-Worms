@@ -1,7 +1,7 @@
 #include "Graphics.h"
 
 
-#define FPS			50.0
+
 #define SCREEN_W		1000
 #define SCREEN_H		696
 #define MOVE_RATE		0.45

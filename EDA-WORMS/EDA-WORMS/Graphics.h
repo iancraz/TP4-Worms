@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
+#include "Worm.h"
 
 typedef uint32_t uint;
 
