@@ -1,7 +1,7 @@
 #include "Graphics.h"
 
 
-
+#define CUADRADITO_SIZE		32
 #define SCREEN_W		1000
 #define SCREEN_H		696
 
@@ -33,10 +33,10 @@ int Graphics::GraphicsMain()
 
 	while (!do_exit)
 	{
+
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 		//al_get_next_event(event_queue, &ev);
-
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			if (key_pressed[KEY_UP])
@@ -141,8 +141,8 @@ int Graphics::GraphicsMain()
 			redraw = false;
 			al_clear_to_color(al_map_rgb(218, 227, 125));
 			al_draw_bitmap(Scenario, 0.0, 0.0, 0);
-			al_draw_scaled_bitmap(worm1, 0.0,0.0, al_get_bitmap_width(worm1), al_get_bitmap_height(worm1), worm1.getX(), worm1.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm1._lookingRight);
-			al_draw_scaled_bitmap(worm2, 0.0, 0.0, al_get_bitmap_width(worm2), al_get_bitmap_height(worm2), worm2.getX(), worm2.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm2._lookingRight);
+			al_draw_scaled_bitmap(wWalkF4, 0.0,0.0, al_get_bitmap_width(wWalkF4), al_get_bitmap_height(wWalkF4), worm1.getX(), worm1.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm1._lookingRight);
+			//al_draw_scaled_bitmap(wWalkF4, 0.0, 0.0, al_get_bitmap_width(wWalkF4), al_get_bitmap_height(wWalkF4), worm2.getX(), worm2.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm2._lookingRight);
 			al_flip_display();
 		}
 	}
