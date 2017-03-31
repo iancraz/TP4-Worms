@@ -21,150 +21,143 @@ Graphics::Graphics()
 
 int Graphics::GraphicsMain()
 {
-	//float worm1_x = SCREEN_W / 4.0 - CUADRADITO_SIZE / 2.0;			//CAMBIAR A LA CLASE
-	//float worm1_y = 616;
+	al_register_event_source(event_queue, al_get_display_event_source(display));
+	al_register_event_source(event_queue, al_get_timer_event_source(timer));
+	al_register_event_source(event_queue, al_get_keyboard_event_source()); //REGISTRAMOS EL TECLADO
 
-	//float worm2_x = SCREEN_W / 2.0 - CUADRADITO_SIZE / 2.0;
-	//float worm2_y = 616;
-
+	al_clear_to_color(al_map_rgb(218, 227, 125));
+	al_draw_bitmap(Scenario, 0.0, 0.0, 0);
+	al_flip_display();
+	al_start_timer(timer);
 	
-	//al_register_event_source(event_queue, al_get_display_event_source(display));
-	//al_register_event_source(event_queue, al_get_timer_event_source(timer));
-	//al_register_event_source(event_queue, al_get_keyboard_event_source()); //REGISTRAMOS EL TECLADO
 
-	//al_clear_to_color(al_map_rgb(218, 227, 125));
-	//al_draw_bitmap(Scenario, 0.0, 0.0, 0);
-	//al_flip_display();
-	//al_start_timer(timer);
-	//
+	while (!do_exit)
+	{
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+		//al_get_next_event(event_queue, &ev);
 
-	//while (!do_exit)
-	//{
-	//	ALLEGRO_EVENT ev;
-	//	al_wait_for_event(event_queue, &ev);
-	//	//al_get_next_event(event_queue, &ev);
+		if (ev.type == ALLEGRO_EVENT_TIMER)
+		{
+			if (key_pressed[KEY_UP])
+				worm1.startJumping();
 
-	//	if (ev.type == ALLEGRO_EVENT_TIMER)
-	//	{
-	//		if (key_pressed[KEY_UP])
-	//			worm1.startJumping();
+			if (key_pressed[KEY_LEFT])
+			{
+				worm1._lookingRight = false;
+				if(worm1.whatAmIDoing() == STILL)
+					worm1.startMoving
+				else if (worm1.whatAmIDoing() == )
+				
+					//FALTA SETTER
+			}
+		
+			if (key_pressed[KEY_RIGHT])
+			{
+				worm1_x += MOVE_RATE;
+				worm_1._lookingRight = true;		//FALTA SETTER
+			}
 
-	//		if (key_pressed[KEY_LEFT])
-	//		{
-	//			worm1._lookingRight = false;
-	//			if(worm1.whatAmIDoing() == STILL)
-	//				worm1.startMoving
-	//			else if (worm1.whatAmIDoing() == )
-	//			
-	//				//FALTA SETTER
-	//		}
-	//	
-	//		if (key_pressed[KEY_RIGHT])
-	//		{
-	//			worm1_x += MOVE_RATE;
-	//			worm_1._lookingRight = true;		//FALTA SETTER
-	//		}
+			if (key_pressed[KEY_W] && worm2_y >= MOVE_RATE)
+				worm2_y -= MOVE_RATE;
 
-	//		if (key_pressed[KEY_W] && worm2_y >= MOVE_RATE)
-	//			worm2_y -= MOVE_RATE;
+			if (key_pressed[KEY_A] && worm2_x >= MOVE_RATE)
+			{
+				worm2_x -= MOVE_RATE;
+				worm_2._lookingRight = false;		//FALTA SETTER
+			}
 
-	//		if (key_pressed[KEY_A] && worm2_x >= MOVE_RATE)
-	//		{
-	//			worm2_x -= MOVE_RATE;
-	//			worm_2._lookingRight = false;		//FALTA SETTER
-	//		}
+			if (key_pressed[KEY_D] && worm2_x <= SCREEN_W - CUADRADITO_SIZE - MOVE_RATE)
+			{
+				worm2_x += MOVE_RATE;
+				worm_2._lookingRight = true;		//FALTA SETTER
+			}
+				
 
-	//		if (key_pressed[KEY_D] && worm2_x <= SCREEN_W - CUADRADITO_SIZE - MOVE_RATE)
-	//		{
-	//			worm2_x += MOVE_RATE;
-	//			worm_2._lookingRight = true;		//FALTA SETTER
-	//		}
-	//			
+			redraw = true;
+		}
 
-	//		redraw = true;
-	//	}
+		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			do_exit = true;
 
-	//	else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-	//		do_exit = true;
+		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+		{
+			switch (ev.keyboard.keycode) {
+			case ALLEGRO_KEY_UP:
+				key_pressed[KEY_UP] = true;
+				break;
 
-	//	else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
-	//	{
-	//		switch (ev.keyboard.keycode) {
-	//		case ALLEGRO_KEY_UP:
-	//			key_pressed[KEY_UP] = true;
-	//			break;
+			case ALLEGRO_KEY_LEFT:
+				key_pressed[KEY_LEFT] = true;
+				break;
 
-	//		case ALLEGRO_KEY_LEFT:
-	//			key_pressed[KEY_LEFT] = true;
-	//			break;
+			case ALLEGRO_KEY_RIGHT:
+				key_pressed[KEY_RIGHT] = true;
+				break;
+			case ALLEGRO_KEY_W:
+				key_pressed[KEY_W] = true;
+				break;
+			case ALLEGRO_KEY_A:
+				key_pressed[KEY_A] = true;
+				break;
+			case ALLEGRO_KEY_D:
+				key_pressed[KEY_D] = true;
+				break;
+			}
+		}
 
-	//		case ALLEGRO_KEY_RIGHT:
-	//			key_pressed[KEY_RIGHT] = true;
-	//			break;
-	//		case ALLEGRO_KEY_W:
-	//			key_pressed[KEY_W] = true;
-	//			break;
-	//		case ALLEGRO_KEY_A:
-	//			key_pressed[KEY_A] = true;
-	//			break;
-	//		case ALLEGRO_KEY_D:
-	//			key_pressed[KEY_D] = true;
-	//			break;
-	//		}
-	//	}
+		else if (ev.type == ALLEGRO_EVENT_KEY_UP)
+		{
+			switch (ev.keyboard.keycode) {
+			case ALLEGRO_KEY_UP:
+				key_pressed[KEY_UP] = false;
+				break;
 
-	//	else if (ev.type == ALLEGRO_EVENT_KEY_UP)
-	//	{
-	//		switch (ev.keyboard.keycode) {
-	//		case ALLEGRO_KEY_UP:
-	//			key_pressed[KEY_UP] = false;
-	//			break;
+			case ALLEGRO_KEY_LEFT:
+				key_pressed[KEY_LEFT] = false;
+				break;
 
-	//		case ALLEGRO_KEY_LEFT:
-	//			key_pressed[KEY_LEFT] = false;
-	//			break;
+			case ALLEGRO_KEY_RIGHT:
+				key_pressed[KEY_RIGHT] = false;
+				break;
+			case ALLEGRO_KEY_W:
+				key_pressed[KEY_W] = false;
+				break;
+			case ALLEGRO_KEY_A:
+				key_pressed[KEY_A] = false;
+				break;
+			case ALLEGRO_KEY_D:
+				key_pressed[KEY_D] = false;
+				break;
 
-	//		case ALLEGRO_KEY_RIGHT:
-	//			key_pressed[KEY_RIGHT] = false;
-	//			break;
-	//		case ALLEGRO_KEY_W:
-	//			key_pressed[KEY_W] = false;
-	//			break;
-	//		case ALLEGRO_KEY_A:
-	//			key_pressed[KEY_A] = false;
-	//			break;
-	//		case ALLEGRO_KEY_D:
-	//			key_pressed[KEY_D] = false;
-	//			break;
+			case ALLEGRO_KEY_ESCAPE:
+				do_exit = true;
+				break;
+			}
+		}
 
-	//		case ALLEGRO_KEY_ESCAPE:
-	//			do_exit = true;
-	//			break;
-	//		}
-	//	}
+		if (redraw && al_is_event_queue_empty(event_queue)) {
 
-	//	if (redraw && al_is_event_queue_empty(event_queue)) {
+			redraw = false;
+			al_clear_to_color(al_map_rgb(218, 227, 125));
+			al_draw_bitmap(Scenario, 0.0, 0.0, 0);
+			al_draw_scaled_bitmap(worm1, 0.0,0.0, al_get_bitmap_width(worm1), al_get_bitmap_height(worm1), worm1.getX(), worm1.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm1._lookingRight);
+			al_draw_scaled_bitmap(worm2, 0.0, 0.0, al_get_bitmap_width(worm2), al_get_bitmap_height(worm2), worm2.getX(), worm2.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm2._lookingRight);
+			al_flip_display();
+		}
+	}
 
-	//		redraw = false;
-	//		al_clear_to_color(al_map_rgb(218, 227, 125));
-	//		al_draw_bitmap(Scenario, 0.0, 0.0, 0);
-	//		al_draw_scaled_bitmap(worm1, 0.0,0.0, al_get_bitmap_width(worm1), al_get_bitmap_height(worm1), worm1.getX(), worm1.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm1._lookingRight);
-	//		al_draw_scaled_bitmap(worm2, 0.0, 0.0, al_get_bitmap_width(worm2), al_get_bitmap_height(worm2), worm2.getX(), worm2.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm2._lookingRight);
-	//		al_flip_display();
-	//	}
-	//}
-
-	//al_destroy_timer(timer);
-	//al_destroy_display(display);
-	//al_destroy_event_queue(event_queue);
+	al_destroy_timer(timer);
+	al_destroy_display(display);
+	al_destroy_event_queue(event_queue);
 
 	return 0;
 }
 
-//void printWorm(uint32_t frameCount, Worm worm)
-//{
-//
-//}
+void printWorm(uint32_t frameCount, Worm worm)
+{
+
+}
 
 int Graphics::allegro_setup()
 {
