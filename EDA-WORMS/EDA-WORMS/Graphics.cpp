@@ -22,9 +22,6 @@ Graphics::Graphics()
 
 int Graphics::GraphicsMain()
 {
-	
-	bool isLookingRight1 = false;
-	bool isLookingRight2 = false;
 	float worm1_x = SCREEN_W / 4.0 - CUADRADITO_SIZE / 2.0;			//CAMBIAR A LA CLASE
 	float worm1_y = 616;
 
@@ -56,13 +53,14 @@ int Graphics::GraphicsMain()
 			if (key_pressed[KEY_LEFT] && worm1_x >= MOVE_RATE)
 			{
 				worm1_x -= MOVE_RATE;
-				isLookingRight1 = false;		//FALTA SETTER
+				worm_1._lookingRight = false;
+					//FALTA SETTER
 			}
 		
 			if (key_pressed[KEY_RIGHT] && worm1_x <= SCREEN_W - CUADRADITO_SIZE - MOVE_RATE)
 			{
 				worm1_x += MOVE_RATE;
-				isLookingRight1 = true;		//FALTA SETTER
+				worm_1._lookingRight = true;		//FALTA SETTER
 			}
 
 			if (key_pressed[KEY_W] && worm2_y >= MOVE_RATE)
@@ -71,13 +69,13 @@ int Graphics::GraphicsMain()
 			if (key_pressed[KEY_A] && worm2_x >= MOVE_RATE)
 			{
 				worm2_x -= MOVE_RATE;
-				isLookingRight2 = false;		//FALTA SETTER
+				worm_2._lookingRight = false;		//FALTA SETTER
 			}
 
 			if (key_pressed[KEY_D] && worm2_x <= SCREEN_W - CUADRADITO_SIZE - MOVE_RATE)
 			{
 				worm2_x += MOVE_RATE;
-				isLookingRight2 = true;		//FALTA SETTER
+				worm_2._lookingRight = true;		//FALTA SETTER
 			}
 				
 
@@ -148,8 +146,8 @@ int Graphics::GraphicsMain()
 			redraw = false;
 			al_clear_to_color(al_map_rgb(218, 227, 125));
 			al_draw_bitmap(Scenario, 0.0, 0.0, 0);
-			al_draw_scaled_bitmap(worm1, 0.0,0.0, al_get_bitmap_width(worm1), al_get_bitmap_height(worm1), worm1_x, worm1_y, CUADRADITO_SIZE, CUADRADITO_SIZE, isLookingRight1);
-			al_draw_scaled_bitmap(worm2, 0.0, 0.0, al_get_bitmap_width(worm2), al_get_bitmap_height(worm2), worm2_x, worm2_y, CUADRADITO_SIZE, CUADRADITO_SIZE, isLookingRight2);
+			al_draw_scaled_bitmap(worm1, 0.0,0.0, al_get_bitmap_width(worm1), al_get_bitmap_height(worm1), worm1_x, worm1_y, CUADRADITO_SIZE, CUADRADITO_SIZE, worm_1._lookingRight);
+			al_draw_scaled_bitmap(worm2, 0.0, 0.0, al_get_bitmap_width(worm2), al_get_bitmap_height(worm2), worm2_x, worm2_y, CUADRADITO_SIZE, CUADRADITO_SIZE, worm_2._lookingRight);
 			al_flip_display();
 		}
 	}

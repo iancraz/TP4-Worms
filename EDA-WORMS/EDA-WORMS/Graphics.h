@@ -54,6 +54,10 @@ private:
 	ALLEGRO_BITMAP *wJumpF9 = NULL;
 	ALLEGRO_BITMAP *wJumpF10 = NULL;
 
+
+	Worm worm_1;
+	Worm worm_2;
+
 	bool key_pressed[6]; //Estado de teclas, true cuando esta apretada
 	bool redraw;
 	bool do_exit;
