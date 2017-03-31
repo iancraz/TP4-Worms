@@ -18,6 +18,7 @@ public:
 	wormState whatAmIDoing();
 	uint32_t getCurrentFrame();
 	bool _lookingRight();
+	void lookRight(bool temp);
 
 private:
 	Position p;	//px

@@ -22,13 +22,6 @@ Graphics::Graphics()
 
 int Graphics::GraphicsMain()
 {
-	float worm1_x = SCREEN_W / 4.0 - CUADRADITO_SIZE / 2.0;			//CAMBIAR A LA CLASE
-	float worm1_y = 616;
-
-	float worm2_x = SCREEN_W / 2.0 - CUADRADITO_SIZE / 2.0;
-	float worm2_y = 616;
-
-	
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source()); //REGISTRAMOS EL TECLADO
@@ -42,45 +35,42 @@ int Graphics::GraphicsMain()
 	while (!do_exit)
 	{
 		ALLEGRO_EVENT ev;
-		al_wait_for_event(event_queue, &ev);
-		//al_get_next_event(event_queue, &ev);
-
-		if (ev.type == ALLEGRO_EVENT_TIMER)
+		if(al_get_next_event(event_queue, &ev))
 		{
-			if (key_pressed[KEY_UP] && worm1_y >= MOVE_RATE)
-				worm1_y -= MOVE_RATE;
-
-			if (key_pressed[KEY_LEFT] && worm1_x >= MOVE_RATE)
+			if (ev.type == ALLEGRO_EVENT_TIMER)
 			{
-				worm1_x -= MOVE_RATE;
-				worm_1._lookingRight = false;
-					//FALTA SETTER
-			}
-		
-			if (key_pressed[KEY_RIGHT] && worm1_x <= SCREEN_W - CUADRADITO_SIZE - MOVE_RATE)
-			{
-				worm1_x += MOVE_RATE;
-				worm_1._lookingRight = true;		//FALTA SETTER
+				if (key_pressed[KEY_UP] && worm2.whatAmIDoing() == STILL)
+					wor2.startJumping();
+
+				if (key_pressed[KEY_LEFT] && worm2.whatAmIDoing() == STILL)
+				{
+					worm2.lookRight(false);
+					worm2.startMoving();
+				}
+			
+				if (key_pressed[KEY_RIGHT] && worm2.whatAmIDoing() ==STILL)
+				{
+					worm2.lookRight(true);
+					worm2.startMoving();
+				}	
+
+				if (key_pressed[KEY_W] && worm1.whatAmIDoing()==STILL)
+					worm1.startJumping();
+
+				if (key_pressed[KEY_A] && worm1.whatAmIDoing()==STILL)
+				{
+					womr1.lookRight(false);
+					worm1.startMoving();
+				}
+
+				if (key_pressed[KEY_D] && worm1.whatAmIDoing()==STILL)
+				{
+					worm1.lookRight(true);
+					worm1.startMoving();
+				}
+				redraw = true;
 			}
 
-			if (key_pressed[KEY_W] && worm2_y >= MOVE_RATE)
-				worm2_y -= MOVE_RATE;
-
-			if (key_pressed[KEY_A] && worm2_x >= MOVE_RATE)
-			{
-				worm2_x -= MOVE_RATE;
-				worm_2._lookingRight = false;		//FALTA SETTER
-			}
-
-			if (key_pressed[KEY_D] && worm2_x <= SCREEN_W - CUADRADITO_SIZE - MOVE_RATE)
-			{
-				worm2_x += MOVE_RATE;
-				worm_2._lookingRight = true;		//FALTA SETTER
-			}
-				
-
-			redraw = true;
-		}
 
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			do_exit = true;
@@ -91,11 +81,9 @@ int Graphics::GraphicsMain()
 			case ALLEGRO_KEY_UP:
 				key_pressed[KEY_UP] = true;
 				break;
-
 			case ALLEGRO_KEY_LEFT:
 				key_pressed[KEY_LEFT] = true;
 				break;
-
 			case ALLEGRO_KEY_RIGHT:
 				key_pressed[KEY_RIGHT] = true;
 				break;
@@ -146,8 +134,8 @@ int Graphics::GraphicsMain()
 			redraw = false;
 			al_clear_to_color(al_map_rgb(218, 227, 125));
 			al_draw_bitmap(Scenario, 0.0, 0.0, 0);
-			al_draw_scaled_bitmap(worm1, 0.0,0.0, al_get_bitmap_width(worm1), al_get_bitmap_height(worm1), worm1_x, worm1_y, CUADRADITO_SIZE, CUADRADITO_SIZE, worm_1._lookingRight);
-			al_draw_scaled_bitmap(worm2, 0.0, 0.0, al_get_bitmap_width(worm2), al_get_bitmap_height(worm2), worm2_x, worm2_y, CUADRADITO_SIZE, CUADRADITO_SIZE, worm_2._lookingRight);
+			//al_draw_scaled_bitmap(worm1, 0.0,0.0, al_get_bitmap_width(worm1), al_get_bitmap_height(worm1), worm1_x, worm1_y, CUADRADITO_SIZE, CUADRADITO_SIZE, worm_1._lookingRight);
+			//al_draw_scaled_bitmap(worm2, 0.0, 0.0, al_get_bitmap_width(worm2), al_get_bitmap_height(worm2), worm2_x, worm2_y, CUADRADITO_SIZE, CUADRADITO_SIZE, worm_2._lookingRight);
 			al_flip_display();
 		}
 	}

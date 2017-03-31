@@ -135,3 +135,9 @@ bool Worm::_lookingRight()
 {
 	return lookingRight;
 }
+
+void Worm::lookRight(bool temp)
+{
+	lookingRight=temp;
+	return;
+}
