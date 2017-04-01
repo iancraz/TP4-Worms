@@ -5,7 +5,7 @@
 #define MAX_Y_POSITION	616
 #define V_JUMP	27.0
 #define V_WALK	27.0
-#define GRAVITY	0.24
+#define GRAVITY	1.24
 #define M_PI acos(-1.0)
 
 Worm::Worm()
@@ -62,14 +62,14 @@ void Worm::continueAction()
 
 	if(IamDoing == JUMPING && aux == false)
 	{
-		p.setY(MAX_Y_POSITION + sin((double)60*2*M_PI/180)*V_JUMP* ((double)1/(FPS - frameCount + 1)) + (GRAVITY * pow(((double)1/(FPS - frameCount +1)),2)));
+		p.setY(MAX_Y_POSITION - sin((double)60*2*M_PI/180)*V_JUMP* ((double)1/(FPS - frameCount + 1)) - (GRAVITY * pow(((double)1/(FPS - frameCount +1)),2)));
 		switch(lookingRight)
 		{
 			case true:
 				p.setX(p.getX()+cos((double)60*2*M_PI/180)*V_JUMP*((double)1/(FPS - frameCount+1)));
 				break;
 			case false:
-				p.setX(p.getX()-cos((double)60*2*M_PI/180)*V_JUMP*((double)1/(FPS - frameCount+1)));
+				p.setX(p.getX()-cos((double)(60*2*M_PI/180))*V_JUMP*((double)1/(FPS - frameCount+1)));
 				break;
 		}
 		if(p.getY() > MAX_Y_POSITION)
@@ -84,12 +84,12 @@ void Worm::continueAction()
 		switch(lookingRight)
 		{
 			case true:
-				if((p.getX()+(V_WALK/FPS)) <= (START_POSITION + MAX_POSITION))
-					p.setX(p.getX()+(V_WALK/FPS));
+				if((p.getX()+(V_WALK/FPS)) <= (START_POSITION+MAX_POSITION))
+					p.setX(p.getX()+((double)V_WALK/FPS));
 				break;
 			case false:
-			if((p.getX()-(V_WALK/FPS)) >= (START_POSITION + MAX_POSITION))
-					p.setX(p.getX()-(V_WALK/FPS));
+				if((p.getX()-(V_WALK/FPS)) >= START_POSITION)
+					p.setX(p.getX()-((double)V_WALK/FPS));
 				break;
 		}
 		if(frameCount == (int32_t)(FPS+1))
@@ -103,6 +103,15 @@ void Worm::continueAction()
 			p.setX(START_POSITION);
 		}
 		frameCount++;
+	}
+	else if((IamDoing== FINISHING_WALKING || IamDoing== FINISHING_JUMPING) && frameCount < 6)
+	{
+		frameCount++;
+	}
+	else if((IamDoing== FINISHING_WALKING || IamDoing == FINISHING_JUMPING)&&(frameCount>=6))
+	{
+		frameCount=0;
+		IamDoing=STILL;
 	}
 	return;
 

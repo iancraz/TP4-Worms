@@ -31,46 +31,74 @@ int Graphics::GraphicsMain()
 	al_draw_bitmap(Scenario, 0.0, 0.0, 0);
 	al_flip_display();
 	al_start_timer(timer);
-	
+	bool miliseconds = false;
 
 	while (!do_exit)
 	{
-
 		ALLEGRO_EVENT ev;
 
-		if (al_get_next_event(event_queue, &ev))
+		al_wait_for_event(event_queue, &ev);
 		{
 			if (ev.type == ALLEGRO_EVENT_TIMER)
-
 			{
 				if (key_pressed[KEY_UP] && worm2.whatAmIDoing() == STILL)
-					worm2.startJumping();
-
-				if (key_pressed[KEY_LEFT] && worm2.whatAmIDoing() == STILL)
 				{
-					worm2.lookRight(false);
-					worm2.startMoving();
+					worm2.startJumping();
+					key_pressed[KEY_UP]=false;
 				}
 
-				if (key_pressed[KEY_RIGHT] && worm2.whatAmIDoing() == STILL)
+				if (key_pressed[KEY_LEFT] && (worm2.whatAmIDoing() == STILL|| worm2.whatAmIDoing()== FINISHING_WALKING))
 				{
-					worm2.lookRight(true);
-					worm2.startMoving();
+					if(miliseconds == true)
+					{
+						worm2.lookRight(false);
+						worm2.startMoving();
+						key_pressed[KEY_LEFT]=false;
+					}
+					else
+						miliseconds = true;
+				}
+
+				if (key_pressed[KEY_RIGHT] && (worm2.whatAmIDoing() == STILL|| worm2.whatAmIDoing()== FINISHING_WALKING))
+				{
+					if(miliseconds==true)
+					{
+						worm2.lookRight(true);
+						worm2.startMoving();
+						key_pressed[KEY_RIGHT]=false;
+					}
+					else
+						miliseconds=true;
 				}
 
 				if (key_pressed[KEY_W] && worm1.whatAmIDoing() == STILL)
-					worm1.startJumping();
-
-				if (key_pressed[KEY_A] && worm1.whatAmIDoing() == STILL)
 				{
-					worm1.lookRight(false);
-					worm1.startMoving();
+					worm1.startJumping();
+					key_pressed[KEY_W]=false;
 				}
 
-				if (key_pressed[KEY_D] && worm1.whatAmIDoing() == STILL)
+				if (key_pressed[KEY_A] && (worm1.whatAmIDoing() == STILL || worm1.whatAmIDoing()== FINISHING_WALKING))
 				{
-					worm1.lookRight(true);
-					worm1.startMoving();
+					if(miliseconds==true)
+					{
+						worm1.lookRight(false);
+						worm1.startMoving();
+						key_pressed[KEY_A]=false;
+					}
+					else
+						miliseconds=true;
+				}
+
+				if (key_pressed[KEY_D] && (worm1.whatAmIDoing() == STILL|| worm1.whatAmIDoing()== FINISHING_WALKING))
+				{
+					if(miliseconds==true)
+					{
+						worm1.lookRight(true);
+						worm1.startMoving();
+						key_pressed[KEY_D]=false;
+					}
+					else
+						miliseconds=true;
 				}
 				redraw = true;
 			}
@@ -118,19 +146,23 @@ int Graphics::GraphicsMain()
 
 				case ALLEGRO_KEY_LEFT:
 					key_pressed[KEY_LEFT] = false;
+					miliseconds=false;
 					break;
 
 				case ALLEGRO_KEY_RIGHT:
 					key_pressed[KEY_RIGHT] = false;
+					miliseconds=false;
 					break;
 				case ALLEGRO_KEY_W:
 					key_pressed[KEY_W] = false;
 					break;
 				case ALLEGRO_KEY_A:
 					key_pressed[KEY_A] = false;
+					miliseconds=false;
 					break;
 				case ALLEGRO_KEY_D:
 					key_pressed[KEY_D] = false;
+					miliseconds=false;
 					break;
 
 				case ALLEGRO_KEY_ESCAPE:
@@ -147,7 +179,7 @@ int Graphics::GraphicsMain()
 				al_draw_bitmap(Scenario, 0.0, 0.0, 0);
 
 				al_draw_scaled_bitmap(wWalkF4, 0.0, 0.0, al_get_bitmap_width(wWalkF4), al_get_bitmap_height(wWalkF4), worm1.getX(), worm1.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm1._lookingRight());
-				//al_draw_scaled_bitmap(wWalkF4, 0.0, 0.0, al_get_bitmap_width(wWalkF4), al_get_bitmap_height(wWalkF4), worm2.getX(), worm2.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm2._lookingRight);
+				al_draw_scaled_bitmap(wWalkF4, 0.0, 0.0, al_get_bitmap_width(wWalkF4), al_get_bitmap_height(wWalkF4), worm2.getX(), worm2.getY(), CUADRADITO_SIZE, CUADRADITO_SIZE, worm2._lookingRight());
 				al_flip_display();
 			}
 		}
@@ -184,7 +216,7 @@ int Graphics::allegro_setup()
 		return -1;
 	}
 
-	timer = al_create_timer(1.0 / FPS);
+	timer = al_create_timer((double)1/FPS);
 	if (!timer) {
 		fprintf(stderr, "failed to create timer!\n");
 		return -1;
