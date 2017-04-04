@@ -1,12 +1,13 @@
 #include "Worm.h"
 #include <cmath>
-#define START_POSITION	701
-#define MAX_POSITION	511
+#define START_POSITION	230
+#define MAX_POSITION	480				//Es la diferencia entre el inicio y el final en px para que no se pase
 #define MAX_Y_POSITION	616
-#define V_JUMP	27.0
-#define V_WALK	27.0
-#define GRAVITY	1.24
-#define M_PI acos(-1.0)
+#define V_JUMP		4.5
+#define CORRECTION_FACTOR	0.03
+#define V_WALK		27.0
+#define GRAVITY		0.24
+#define M_PI		(acos(-1.0))
 
 Worm::Worm()
 {
@@ -32,14 +33,14 @@ void Worm::startMoving(void)//Funcion que mueve la posicion del worm en un frame
 	frameCount=0;
 }
 
-void Worm::startJumping()
+void Worm::startJumping()//Funcion que mueve 1 frame el salto
 {
 	IamDoing=JUMPING;
 	aux=false;
 	frameCount = 0;
 }
 
-void Worm::continueAction()
+void Worm::continueAction()	//Funcion que detecta si esta saltando o caminando y continua con ese movimiento
 {
 	if(frameCount > FPS || aux == true)
 	{
@@ -60,38 +61,45 @@ void Worm::continueAction()
 		aux=false;
 	}
 
-	if(IamDoing == JUMPING && aux == false)
+	if(IamDoing == JUMPING && aux == false)		//Si esta saltando y no choco con el final
 	{
-		p.setY(MAX_Y_POSITION - sin((double)60*2*M_PI/180)*V_JUMP* ((double)1/(FPS - frameCount + 1)) - (GRAVITY * pow(((double)1/(FPS - frameCount +1)),2)));
+	
+		p.setY(MAX_Y_POSITION - V_JUMP*sin((double)M_PI / 3)*(frameCount)+(GRAVITY/2)*pow(frameCount, 2));
+		//Ecuacion de MRU para tiro oblicuo
+
 		switch(lookingRight)
 		{
 			case true:
-				p.setX(p.getX()+cos((double)60*2*M_PI/180)*V_JUMP*((double)1/(FPS - frameCount+1)));
+				if((p.getX() + ((frameCount)*V_JUMP*cos((double)M_PI / 3))*CORRECTION_FACTOR) < (START_POSITION+MAX_POSITION))
+					p.setX(p.getX() + ((frameCount)*V_JUMP*cos((double)M_PI/3))*CORRECTION_FACTOR);
 				break;
 			case false:
-				p.setX(p.getX()-cos((double)(60*2*M_PI/180))*V_JUMP*((double)1/(FPS - frameCount+1)));
+				if ((p.getX() - ((frameCount)*V_JUMP*cos((double)M_PI / 3))*CORRECTION_FACTOR) > (START_POSITION))
+					p.setX(p.getX() - ((frameCount)*V_JUMP*cos((double)M_PI / 3))*CORRECTION_FACTOR);
 				break;
 		}
-		if(p.getY() > MAX_Y_POSITION)
+		if(p.getY() >MAX_Y_POSITION)
 		{
 			p.setY(MAX_Y_POSITION);
 			aux = true;
 		}
 		frameCount++;
 	}
-	else if(IamDoing == WALKING && aux == false)
+	else if(IamDoing == WALKING && aux == false) //Si esta caminando pero no choco con el final
 	{
 		switch(lookingRight)
 		{
-			case true:
-				if((p.getX()+(V_WALK/FPS)) <= (START_POSITION+MAX_POSITION))
-					p.setX(p.getX()+((double)V_WALK/FPS));
-				break;
-			case false:
-				if((p.getX()-(V_WALK/FPS)) >= START_POSITION)
-					p.setX(p.getX()-((double)V_WALK/FPS));
-				break;
+		case true: {
+					if ((p.getX() + (V_WALK / FPS)) <= (START_POSITION + MAX_POSITION))
+						p.setX(p.getX() + (V_WALK / FPS));
+					break;
+					}
+		case false: {
+			if ((p.getX() - (V_WALK / FPS)) >= (START_POSITION))
+				p.setX(p.getX() - (V_WALK / FPS));
+			break;
 		}
+	}
 		if(frameCount == (int32_t)(FPS+1))
 			IamDoing=FINISHING_WALKING;
 		if (p.getX()> (START_POSITION + MAX_POSITION))
@@ -104,14 +112,15 @@ void Worm::continueAction()
 		}
 		frameCount++;
 	}
-	else if((IamDoing== FINISHING_WALKING || IamDoing== FINISHING_JUMPING) && frameCount < 6)
+	else if (IamDoing== FINISHING_WALKING)
 	{
+		IamDoing = STILL;
 		frameCount++;
 	}
-	else if((IamDoing== FINISHING_WALKING || IamDoing == FINISHING_JUMPING)&&(frameCount>=6))
+	else if (IamDoing == FINISHING_JUMPING)
 	{
-		frameCount=0;
-		IamDoing=STILL;
+		IamDoing = STILL;
+		frameCount++;
 	}
 	return;
 

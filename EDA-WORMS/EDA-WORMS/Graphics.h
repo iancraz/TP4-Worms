@@ -2,10 +2,29 @@
 #ifndef _GRAPHICS_H
 #define _GGRAPHICS_H
 
+
+#include <iostream>
 #include <cstdio>
+#include <cstdlib>
+#include <ctime>
+
+#include "Worm.h"
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
-#include "Worm.h"
+#include<allegro5\allegro_video.h>
+#include<allegro5\allegro_primitives.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+#include<allegro5\allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include<allegro5\mouse.h>
+#include<allegro5\mouse_cursor.h>
+
+
+
+#define CUADRADITO_SIZE		60
+#define SCREEN_W		1000
+#define SCREEN_H		696
 
 typedef uint32_t uint;
 
@@ -15,12 +34,19 @@ public:
 	Graphics();
 	int GraphicsMain();
 	int allegro_setup();
+	void allegro_desinstalar();
+	void printWorm(Worm _worm);
+	void intro();
 
 private:
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *Scenario = NULL;
+	ALLEGRO_BITMAP *sega = NULL;
+	ALLEGRO_BITMAP* mouse = NULL;
+	ALLEGRO_MOUSE_CURSOR *cursor = NULL;
+	ALLEGRO_SAMPLE *sample2 = NULL;
 
 
 	ALLEGRO_BITMAP *wWalkF1 = NULL;
@@ -50,15 +76,22 @@ private:
 	ALLEGRO_BITMAP *wJumpF9 = NULL;
 	ALLEGRO_BITMAP *wJumpF10 = NULL;
 
+	uint walkArray[50];
+	uint jumpArray[50]; 
+	ALLEGRO_BITMAP * bitmapArrWalk[15];
+	ALLEGRO_BITMAP * bitmapArrJump[10];
+
 
 	Worm worm1;
 	Worm worm2;
 
+	uint miliseconds;
 	bool key_pressed[6]; //Estado de teclas, true cuando esta apretada
 	bool redraw;
 	bool do_exit;
 
 	int loadImages();
+	void dispatcher(ALLEGRO_EVENT ev);
 
 };
 
